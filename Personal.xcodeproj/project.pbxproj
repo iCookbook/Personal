@@ -35,6 +35,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F01C2803290EB9400060B60B /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		F04DE470290AEB5A00DD4C39 /* Personal.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Personal.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F04DE473290AEB5A00DD4C39 /* Personal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Personal.h; sourceTree = "<group>"; };
 		F04DE478290AEB5A00DD4C39 /* PersonalTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PersonalTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -69,6 +70,7 @@
 		F04DE466290AEB5900DD4C39 = {
 			isa = PBXGroup;
 			children = (
+				F01C2803290EB9400060B60B /* README.md */,
 				F04DE472290AEB5A00DD4C39 /* Personal */,
 				F04DE47C290AEB5A00DD4C39 /* PersonalTests */,
 				F04DE471290AEB5A00DD4C39 /* Products */,
