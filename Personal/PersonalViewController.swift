@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Resources
 
 final class PersonalViewController: UIViewController {
     
@@ -31,7 +32,8 @@ final class PersonalViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        title = Texts.Personal.title
+        view.backgroundColor = Colors.systemBackground
     }
 }
 

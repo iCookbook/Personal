@@ -1,0 +1,6 @@
+framework module Personal {
+  umbrella header "Personal-umbrella.h"
+
+  export *
+  module * { export * }
+}

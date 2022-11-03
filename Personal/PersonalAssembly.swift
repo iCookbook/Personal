@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Persistence
 
 public final class PersonalAssembly {
     
@@ -47,8 +48,10 @@ public final class PersonalAssembly {
 
 public struct PersonalContext {
     weak var moduleOutput: PersonalModuleOutput?
+    let moduleDependency: CoreDataManagerProtocol
     
-    public init(moduleOutput: PersonalModuleOutput?) {
+    public init(moduleOutput: PersonalModuleOutput? = nil, moduleDependency: CoreDataManagerProtocol) {
         self.moduleOutput = moduleOutput
+        self.moduleDependency = moduleDependency
     }
 }
