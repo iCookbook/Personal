@@ -7,6 +7,7 @@
 
 import Foundation
 import Persistence
+import Resources
 
 final class PersonalInteractor {
     weak var presenter: PersonalInteractorOutput?
@@ -47,7 +48,9 @@ extension PersonalInteractor: PersonalInteractorInput {
     func providePersonalRecipes() {
         let recipes = coreDataManager.fetchRecipes() ?? []
         let entities = recipes.map {
-            RecipeEntity(title: $0.name ?? "", subtitle: "\($0.name ?? "")", imageData: Data())
+            RecipeEntity(title: $0.name,
+                         subtitle: $0.comment ?? "\(Texts.Discover.cookingTime): \($0.cookingTime) \(Texts.RecipeDetails.minutes(count: Int($0.cookingTime))), \(Texts.Discover.servingsCount.lowercased()): \($0.numberOfServings)",
+                         imageData: $0.imageData ?? Images.sampleRecipeImage!.pngData()!)
         }
         presenter?.provideRecipes(entities)
     }

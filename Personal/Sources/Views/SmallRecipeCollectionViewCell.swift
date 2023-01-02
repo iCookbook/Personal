@@ -71,6 +71,8 @@ final class SmallRecipeCollectionViewCell: UICollectionViewCell {
     
     public func setupView() {
         contentView.layer.masksToBounds = true
+        contentView.layer.cornerRadius = 12
+        
         contentView.addSubview(recipeImageView)
         contentView.addSubview(blurEffectView)
         contentView.addSubview(recipeTitleLabel)
