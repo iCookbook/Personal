@@ -8,11 +8,6 @@
 import UIKit
 import Resources
 
-enum Tabs {
-    case personal
-    case favourites
-}
-
 final class ProfileTabView: UIStackView {
     
     // MARK: - Public Properties
@@ -64,7 +59,6 @@ final class ProfileTabView: UIStackView {
         axis = .horizontal
         spacing = 6
         distribution = .fillProportionally
-//        alignment = .center
     }
     
     required init(coder: NSCoder) {

@@ -105,10 +105,36 @@ final class PersonalViewController: UIViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.isScrollEnabled = false
+        collectionView.layer.zPosition = 1
         collectionView.contentInset = UIEdgeInsets(top: 0, left: 16, bottom: 20, right: 16)
         collectionView.register(SmallRecipeCollectionViewCell.self, forCellWithReuseIdentifier: SmallRecipeCollectionViewCell.identifier)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
+    }()
+    
+    private let emptyDataLabel: UILabel = {
+        let titleLabel = UILabel()
+        titleLabel.numberOfLines = 0
+        titleLabel.font = Fonts.subtitle()
+        titleLabel.textAlignment = .center
+        return titleLabel
+    }()
+    
+    private let emptyDataImageView: UIImageView = {
+        let iconImageView = UIImageView()
+        iconImageView.contentMode = .scaleAspectFit
+        iconImageView.translatesAutoresizingMaskIntoConstraints = false
+        return iconImageView
+    }()
+    
+    private lazy var emptyDataStackView: UIStackView = {
+        let emptyDataStackView = UIStackView(arrangedSubviews: [emptyDataImageView, emptyDataLabel])
+        emptyDataStackView.axis = .vertical
+        emptyDataStackView.distribution = .equalCentering
+        emptyDataStackView.spacing = 24
+        emptyDataStackView.alignment = .center
+        emptyDataStackView.translatesAutoresizingMaskIntoConstraints = false
+        return emptyDataStackView
     }()
     
     // MARK: - Init
@@ -129,10 +155,15 @@ final class PersonalViewController: UIViewController {
         super.viewDidLoad()
         
         setupView()
-        presenter.viewDidLoad()
-        presenter.fetchRecipes(for: selectedTab)
-        
         hideKeyboardWhenTappedAround()
+        
+        presenter.viewDidLoad()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        presenter.fetchRecipes(for: selectedTab)
     }
     
     // MARK: - Private Methods
@@ -155,6 +186,25 @@ final class PersonalViewController: UIViewController {
         presenter.fetchRecipes(for: selectedTab)
         yourRecipesTab.isSelected = selectedTab == .personal
         favouritesTab.isSelected = selectedTab == .favourites
+    }
+    
+    private func turnOnEmptyMode() {
+        emptyDataLabel.text = selectedTab.emptyDataDescription
+        emptyDataImageView.image = UIImage(data: selectedTab.emptyDataImage ?? Data())
+        
+        if !scrollView.subviews.contains(emptyDataStackView) {
+            scrollView.addSubview(emptyDataStackView)
+            
+            NSLayoutConstraint.activate([
+                emptyDataImageView.heightAnchor.constraint(equalToConstant: 140),
+                emptyDataImageView.widthAnchor.constraint(equalToConstant: 140),
+                
+                emptyDataStackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 16),
+                emptyDataStackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -16),
+                emptyDataStackView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+                emptyDataStackView.centerYAnchor.constraint(equalTo: scrollView.centerYAnchor),
+            ])
+        }
     }
     
     private func setupView() {
@@ -227,9 +277,13 @@ extension PersonalViewController: PersonalViewInput {
     func updateRecipes(_ entities: [RecipeEntity]) {
         data = entities
         
-        UIView.transition(with: recipesCollectionView, duration: 0.55, options: .transitionCrossDissolve, animations: {
+        UIView.transition(with: recipesCollectionView, duration: 0.55, options: [.allowUserInteraction, .transitionCrossDissolve], animations: {
             self.recipesCollectionView.reloadData()
         })
+        
+        if data.isEmpty {
+            turnOnEmptyMode()
+        }
     }
 }
 
