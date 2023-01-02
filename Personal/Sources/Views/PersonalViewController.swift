@@ -16,8 +16,10 @@ final class PersonalViewController: UIViewController {
     
     private let presenter: PersonalViewOutput
     
+    /// Defines selected tab in `tabsStackView`.
     private var selectedTab = Tabs.personal
     
+    /// Data to display.
     private var data = [RecipeEntity]()
     
     private lazy var avatarImagePicker: UIImagePickerController = {
@@ -35,12 +37,8 @@ final class PersonalViewController: UIViewController {
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         return scrollView
     }()
-    
-    private let topView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
+    private let topView = UIView()
+    private let contentView = UIView()
     
     private lazy var avatarImageView: UIImageView = {
         let imageView = UIImageView()
@@ -64,12 +62,6 @@ final class PersonalViewController: UIViewController {
         return textField
     }()
     
-    private let contentView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
     private lazy var yourRecipesTab: ProfileTabView = {
         let tab = ProfileTabView(image: Images.Personal.personal,
                                  selectedImage: Images.Personal.personalSelected,
@@ -86,7 +78,6 @@ final class PersonalViewController: UIViewController {
         tab.addGestureRecognizer(tapGestureRecognizer)
         return tab
     }()
-    
     private lazy var tabsStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [yourRecipesTab, favouritesTab])
         stackView.distribution = .fillEqually
@@ -119,14 +110,12 @@ final class PersonalViewController: UIViewController {
         titleLabel.textAlignment = .center
         return titleLabel
     }()
-    
     private let emptyDataImageView: UIImageView = {
         let iconImageView = UIImageView()
         iconImageView.contentMode = .scaleAspectFit
         iconImageView.translatesAutoresizingMaskIntoConstraints = false
         return iconImageView
     }()
-    
     private lazy var emptyDataStackView: UIStackView = {
         let emptyDataStackView = UIStackView(arrangedSubviews: [emptyDataImageView, emptyDataLabel])
         emptyDataStackView.axis = .vertical
@@ -216,10 +205,12 @@ final class PersonalViewController: UIViewController {
         
         view.addSubview(scrollView)
         scrollView.addSubview(topView)
+        topView.translatesAutoresizingMaskIntoConstraints = false
         topView.addSubview(avatarImageView)
         topView.addSubview(usernameTextField)
         
         scrollView.addSubview(contentView)
+        contentView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(tabsStackView)
         contentView.addSubview(recipesCollectionView)
         
