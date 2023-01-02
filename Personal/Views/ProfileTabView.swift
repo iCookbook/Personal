@@ -8,6 +8,11 @@
 import UIKit
 import Resources
 
+enum Tabs {
+    case personal
+    case favourites
+}
+
 final class ProfileTabView: UIStackView {
     
     // MARK: - Public Properties

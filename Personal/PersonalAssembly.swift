@@ -23,7 +23,7 @@ public final class PersonalAssembly {
     
     public static func assemble(with context: PersonalContext) -> PersonalAssembly {
         let router = PersonalRouter()
-        let interactor = PersonalInteractor()
+        let interactor = PersonalInteractor(coreDataManager: context.moduleDependency)
         let presenter = PersonalPresenter(router: router, interactor: interactor)
         let viewController = PersonalViewController(presenter: presenter)
         

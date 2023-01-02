@@ -6,10 +6,49 @@
 //  
 
 import Foundation
+import Persistence
 
 final class PersonalInteractor {
     weak var presenter: PersonalInteractorOutput?
+    let coreDataManager: CoreDataManagerProtocol
+    
+    init(coreDataManager: CoreDataManagerProtocol) {
+        self.coreDataManager = coreDataManager
+    }
 }
 
 extension PersonalInteractor: PersonalInteractorInput {
+    
+    func obtainUserAvatar() {
+        guard let data = UserDefaults.userAvatar else { return } // do nothing
+        presenter?.provideUserAvatar(data)
+    }
+    
+    func obtainUserName() {
+        guard let name = UserDefaults.userName else { return } // do nothing
+        presenter?.provideUserName(name)
+    }
+    
+    func saveUserAvatar(_ data: Data) {
+        UserDefaults.userAvatar = data
+    }
+    
+    func saveUserName(_ name: String) {
+        UserDefaults.userName = name
+    }
+    
+    func provideFavouritesRecipes() {
+        let entities = UserDefaults.favouriteRecipes.map {
+            RecipeEntity(title: $0.label ?? "", subtitle: $0.description ?? "", imageData: $0.imageData ?? Data())
+        }
+        presenter?.provideRecipes(entities)
+    }
+    
+    func providePersonalRecipes() {
+        let recipes = coreDataManager.fetchRecipes() ?? []
+        let entities = recipes.map {
+            RecipeEntity(title: $0.name ?? "", subtitle: "\($0.name ?? "")", imageData: Data())
+        }
+        presenter?.provideRecipes(entities)
+    }
 }

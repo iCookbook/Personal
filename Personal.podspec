@@ -13,4 +13,5 @@ Pod::Spec.new do |s|
   s.dependency 'CommonUI'
   s.dependency 'Resources'
   s.dependency 'Persistence'
+  s.dependency 'Logger'
 end

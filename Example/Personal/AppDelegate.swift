@@ -9,16 +9,19 @@
 import UIKit
 import Personal
 import Resources
+import Persistence
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
+    
+    private let coreDataManager: CoreDataManagerProtocol = CoreDataManager(containerName: "Cookbook")
     
     var window: UIWindow?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         let window = UIWindow(frame: UIScreen.main.bounds)
-        let context = PersonalContext(moduleOutput: nil)
+        let context = PersonalContext(moduleOutput: nil, moduleDependency: coreDataManager)
         let assembly = PersonalAssembly.assemble(with: context)
         
         let navController = UINavigationController(rootViewController: assembly.viewController)

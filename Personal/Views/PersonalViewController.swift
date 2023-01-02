@@ -8,12 +8,17 @@
 import UIKit
 import CommonUI
 import Resources
+import Logger
 
 final class PersonalViewController: UIViewController {
     
     // MARK: - Private Properties
     
     private let presenter: PersonalViewOutput
+    
+    private var selectedTab = Tabs.personal
+    
+    private var data = [RecipeEntity]()
     
     private lazy var avatarImagePicker: UIImagePickerController = {
         let imagePicker = UIImagePickerController()
@@ -27,7 +32,6 @@ final class PersonalViewController: UIViewController {
         let scrollView = UIScrollView()
         scrollView.showsVerticalScrollIndicator = false
         scrollView.preservesSuperviewLayoutMargins = true
-        scrollView.contentMode = .center
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         return scrollView
     }()
@@ -50,12 +54,14 @@ final class PersonalViewController: UIViewController {
         return imageView
     }()
     
-    private let usernameTextView: UITextView = {
-        let textView = UITextView()
-        textView.text = Texts.Personal.whatsYourName
-        textView.font = Fonts.title2()
-        textView.translatesAutoresizingMaskIntoConstraints = false
-        return textView
+    private lazy var usernameTextField: UITextField = {
+        let textField = UITextField()
+        textField.placeholder = Texts.Personal.whatsYourName
+        textField.font = Fonts.title2()
+        textField.delegate = self
+        textField.addTarget(self, action: #selector(textFieldDidChanged), for: .allEditingEvents)
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        return textField
     }()
     
     private let contentView: UIView = {
@@ -93,11 +99,13 @@ final class PersonalViewController: UIViewController {
     private lazy var recipesCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = 16
         let collectionView = CollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 20, right: 0)
+        collectionView.isScrollEnabled = false
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: 16, bottom: 20, right: 16)
         collectionView.register(SmallRecipeCollectionViewCell.self, forCellWithReuseIdentifier: SmallRecipeCollectionViewCell.identifier)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
@@ -121,6 +129,10 @@ final class PersonalViewController: UIViewController {
         super.viewDidLoad()
         
         setupView()
+        presenter.viewDidLoad()
+        presenter.fetchRecipes(for: selectedTab)
+        
+        hideKeyboardWhenTappedAround()
     }
     
     // MARK: - Private Methods
@@ -130,27 +142,32 @@ final class PersonalViewController: UIViewController {
     }
     
     @objc private func handleTappingOnRecipesTab() {
-        yourRecipesTab.isSelected = true
-        favouritesTab.isSelected = false
+        selectedTab = .personal
+        onChangingTabEventHandler()
     }
     
     @objc private func handleTappingOnFavouritesTab() {
-        yourRecipesTab.isSelected = false
-        favouritesTab.isSelected = true
+        selectedTab = .favourites
+        onChangingTabEventHandler()
+    }
+    
+    private func onChangingTabEventHandler() {
+        presenter.fetchRecipes(for: selectedTab)
+        yourRecipesTab.isSelected = selectedTab == .personal
+        favouritesTab.isSelected = selectedTab == .favourites
     }
     
     private func setupView() {
         title = Texts.Personal.title
         view.backgroundColor = Colors.systemBackground
         
-        yourRecipesTab.isSelected = true
-        favouritesTab.isSelected = false
+        yourRecipesTab.isSelected = selectedTab == Tabs.personal
+        favouritesTab.isSelected = selectedTab == Tabs.favourites
         
         view.addSubview(scrollView)
         scrollView.addSubview(topView)
-        
         topView.addSubview(avatarImageView)
-        topView.addSubview(usernameTextView)
+        topView.addSubview(usernameTextField)
         
         scrollView.addSubview(contentView)
         contentView.addSubview(tabsStackView)
@@ -170,14 +187,12 @@ final class PersonalViewController: UIViewController {
             
             avatarImageView.leadingAnchor.constraint(equalTo: topView.leadingAnchor, constant: 16),
             avatarImageView.topAnchor.constraint(equalTo: topView.topAnchor),
-//            avatarImageView.heightAnchor.constraint(equalToConstant: 80),
             avatarImageView.widthAnchor.constraint(equalToConstant: 80),
             avatarImageView.bottomAnchor.constraint(equalTo: topView.bottomAnchor),
             
-            usernameTextView.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 12),
-            usernameTextView.topAnchor.constraint(equalTo: topView.topAnchor),
-            usernameTextView.trailingAnchor.constraint(equalTo: topView.trailingAnchor, constant: -8),
-            usernameTextView.bottomAnchor.constraint(equalTo: topView.bottomAnchor),
+            usernameTextField.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 12),
+            usernameTextField.topAnchor.constraint(equalTo: topView.topAnchor, constant: 4),
+            usernameTextField.trailingAnchor.constraint(equalTo: topView.trailingAnchor, constant: -8),
             
             contentView.topAnchor.constraint(equalTo: topView.bottomAnchor),
             contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
@@ -185,12 +200,11 @@ final class PersonalViewController: UIViewController {
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo: view.widthAnchor),
             
-            tabsStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
+            tabsStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             tabsStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 32),
             tabsStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-//            tabsStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             
-            recipesCollectionView.topAnchor.constraint(equalTo: tabsStackView.bottomAnchor),
+            recipesCollectionView.topAnchor.constraint(equalTo: tabsStackView.bottomAnchor, constant: 16),
             recipesCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             recipesCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             recipesCollectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
@@ -198,35 +212,91 @@ final class PersonalViewController: UIViewController {
     }
 }
 
-extension PersonalViewController: PersonalViewInput {
-}
+// MARK: - PersonalViewInput
 
-extension PersonalViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        guard let image = info[.editedImage] as? UIImage else {
-            picker.dismiss(animated: true)
-            return
-        }
-        avatarImageView.image = image
-        picker.dismiss(animated: true)
+extension PersonalViewController: PersonalViewInput {
+    
+    func showUserAvatar(_ data: Data) {
+        avatarImageView.image = UIImage(data: data)
+    }
+    
+    func showUserName(_ name: String) {
+        usernameTextField.text = name
+    }
+    
+    func updateRecipes(_ entities: [RecipeEntity]) {
+        data = entities
+        
+        UIView.transition(with: recipesCollectionView, duration: 0.55, options: .transitionCrossDissolve, animations: {
+            self.recipesCollectionView.reloadData()
+        })
     }
 }
+
+// MARK: - Collection View
 
 extension PersonalViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        0
+        data.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SmallRecipeCollectionViewCell.identifier, for: indexPath) as? SmallRecipeCollectionViewCell else {
             fatalError("Could not cast to `FilterCollectionViewCell` for indexPath \(indexPath) in cellForItemAt")
         }
-//        cell.configure(with: data[indexPath.row])
+        cell.configure(with: data[indexPath.row])
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        CGSize(width: collectionView.frame.size.width / 2 - 24, height: view.frame.size.height * 0.25)
+        CGSize(width: collectionView.frame.size.width / 2 - 24, height: view.frame.size.height * 0.225)
+    }
+}
+
+// MARK: - UIImagePickerControllerDelegate
+
+extension PersonalViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        defer {
+            picker.dismiss(animated: true)
+        }
+        
+        guard let image = info[.editedImage] as? UIImage else {
+            Logger.log("Could not define edited image", logType: .error)
+            return
+        }
+        avatarImageView.image = image
+        
+        guard let data = image.pngData() else {
+            Logger.log("Could convert edited image in raw data", logType: .warning)
+            return
+        }
+        presenter.saveUserAvatar(data)
+    }
+}
+
+// MARK: - UITextFieldDelegate
+
+extension PersonalViewController: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    /// Limiting input to 120 characters.
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let currentCharacterCount = textField.text?.count ?? 0
+        if range.length + range.location > currentCharacterCount {
+            return false
+        }
+        let newLength = currentCharacterCount + string.count - range.length
+        return newLength <= 120
+    }
+    
+    @objc private func textFieldDidChanged(sender: UITextField) {
+        presenter.saveUserName(sender.text ?? "")
     }
 }
