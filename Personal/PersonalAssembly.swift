@@ -2,8 +2,7 @@
 //  PersonalAssembly.swift
 //  Personal
 //
-//  Created by Егор Бадмаев on 27.10.2022.
-//  
+//  Created by Егор Бадмаев on 29.12.2022.
 //
 
 import UIKit
@@ -26,13 +25,14 @@ public final class PersonalAssembly {
         let router = PersonalRouter()
         let interactor = PersonalInteractor()
         let presenter = PersonalPresenter(router: router, interactor: interactor)
-        let viewController = PersonalViewController(output: presenter)
+        let viewController = PersonalViewController(presenter: presenter)
         
         presenter.view = viewController
         presenter.moduleOutput = context.moduleOutput
         
-        interactor.output = presenter
+        interactor.presenter = presenter
         router.viewController = viewController
+        router.presenter = presenter
         
         return PersonalAssembly(view: viewController, input: presenter, router: router)
     }

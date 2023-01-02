@@ -2,8 +2,7 @@
 //  PersonalProtocols.swift
 //  Personal
 //
-//  Created by Егор Бадмаев on 27.10.2022.
-//  
+//  Created by Егор Бадмаев on 29.12.2022.
 //
 
 import Foundation
