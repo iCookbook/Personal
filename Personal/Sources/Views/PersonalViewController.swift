@@ -172,6 +172,8 @@ final class PersonalViewController: UIViewController {
     }
     
     private func onChangingTabEventHandler() {
+        emptyDataLabel.text = nil
+        emptyDataImageView.image = nil
         presenter.fetchRecipes(for: selectedTab)
         yourRecipesTab.isSelected = selectedTab == .personal
         favouritesTab.isSelected = selectedTab == .favourites
