@@ -21,7 +21,7 @@
 		607FACDF1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		6EB4D89BF5628FAE22D097FC /* Pods_Personal_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Personal_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C14CD2858836ABABA593645 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
-		BC8B03CC9CF12AFBD7207FE7 /* Personal.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Personal.podspec; path = ../Personal.podspec; sourceTree = "<group>"; };
+		BC8B03CC9CF12AFBD7207FE7 /* Personal.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Personal.podspec; path = ../Personal.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		D445EFA53CE5627B08D32604 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		E225B9AAA8041FC72F86C4B9 /* Pods-Personal_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Personal_Example.debug.xcconfig"; path = "../../../../Pods/Target Support Files/Pods-Personal_Example/Pods-Personal_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		EFE4B82121346C6A02269B7B /* Pods-Personal_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Personal_Example.release.xcconfig"; path = "../../../../Pods/Target Support Files/Pods-Personal_Example/Pods-Personal_Example.release.xcconfig"; sourceTree = "<group>"; };
@@ -210,6 +210,8 @@
 				"${BUILT_PRODUCTS_DIR}/Models/Models.framework",
 				"${BUILT_PRODUCTS_DIR}/Persistence/Persistence.framework",
 				"${BUILT_PRODUCTS_DIR}/Personal/Personal.framework",
+				"${BUILT_PRODUCTS_DIR}/RecipeDetails/RecipeDetails.framework",
+				"${BUILT_PRODUCTS_DIR}/RecipeForm/RecipeForm.framework",
 				"${BUILT_PRODUCTS_DIR}/Resources/Resources.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -219,6 +221,8 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Models.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Persistence.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Personal.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RecipeDetails.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RecipeForm.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Resources.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
