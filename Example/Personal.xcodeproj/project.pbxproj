@@ -210,6 +210,8 @@
 				"${BUILT_PRODUCTS_DIR}/Models/Models.framework",
 				"${BUILT_PRODUCTS_DIR}/Persistence/Persistence.framework",
 				"${BUILT_PRODUCTS_DIR}/Personal/Personal.framework",
+				"${BUILT_PRODUCTS_DIR}/RecipeDetails/RecipeDetails.framework",
+				"${BUILT_PRODUCTS_DIR}/RecipeForm/RecipeForm.framework",
 				"${BUILT_PRODUCTS_DIR}/Resources/Resources.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -219,6 +221,8 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Models.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Persistence.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Personal.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RecipeDetails.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RecipeForm.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Resources.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;

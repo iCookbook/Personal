@@ -5,7 +5,9 @@
 //  Created by Егор Бадмаев on 29.12.2022.
 //
 
-import Foundation
+import Models
+import Persistence
+import Logger
 
 final class PersonalPresenter {
     weak var view: PersonalViewInput?
@@ -40,6 +42,22 @@ extension PersonalPresenter: PersonalViewOutput {
             interactor.provideFavouritesRecipes()
         case .personal:
             interactor.providePersonalRecipes()
+        }
+    }
+    
+    func openRecipeFormModule() {
+        router.openRecipeFormModule(for: nil)
+    }
+    
+    func didSelectRecipe(_ entity: RecipeEntity) {
+        switch entity.source {
+        case let recipe as Models.Recipe:
+            router.openRecipeDetailsModule(for: recipe)
+        case let recipe as Persistence.Recipe:
+            router.openRecipeFormModule(for: recipe)
+        default:
+            Logger.log("Unhandled case.", logType: .warning)
+            break
         }
     }
     

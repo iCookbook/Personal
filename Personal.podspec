@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'Personal'
-  s.version          = '1.1.1'
+  s.version          = '1.2.0'
   s.summary          = '\'Personal\' module.'
   s.homepage         = 'https://github.com/iCookbook/Personal'
   s.author           = { 'htmlprogrammist' => '60363270+htmlprogrammist@users.noreply.github.com' }
@@ -18,4 +18,7 @@ Pod::Spec.new do |s|
   s.dependency 'Resources'
   s.dependency 'Persistence'
   s.dependency 'Logger'
+  
+  s.dependency 'RecipeDetails'
+  s.dependency 'RecipeForm'
 end

@@ -9,4 +9,6 @@ struct RecipeEntity {
     let title: String
     let subtitle: String
     let imageData: Data
+    
+    var source: Any
 }
