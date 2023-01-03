@@ -40,7 +40,7 @@ extension PersonalInteractor: PersonalInteractorInput {
     
     func provideFavouritesRecipes() {
         let entities = UserDefaults.favouriteRecipes.map {
-            RecipeEntity(title: $0.label ?? "", subtitle: $0.description ?? "", imageData: $0.imageData ?? Data())
+            RecipeEntity(title: $0.label ?? "", subtitle: $0.description ?? "", imageData: $0.imageData ?? Images.sampleRecipeImage.pngData()!)
         }
         presenter?.provideRecipes(entities)
     }
@@ -50,7 +50,7 @@ extension PersonalInteractor: PersonalInteractorInput {
         let entities = recipes.map {
             RecipeEntity(title: $0.name,
                          subtitle: $0.comment ?? "\(Texts.Discover.cookingTime): \($0.cookingTime) \(Texts.RecipeDetails.minutes(count: Int($0.cookingTime))), \(Texts.Discover.servingsCount.lowercased()): \($0.numberOfServings)",
-                         imageData: $0.imageData ?? Images.sampleRecipeImage!.pngData()!)
+                         imageData: $0.imageData ?? Images.sampleRecipeImage.pngData()!)
         }
         presenter?.provideRecipes(entities)
     }
