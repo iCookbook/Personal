@@ -12,3 +12,9 @@ struct RecipeEntity {
     
     var source: Any
 }
+
+extension RecipeEntity: Equatable {
+    static func == (lhs: RecipeEntity, rhs: RecipeEntity) -> Bool {
+        lhs.title == rhs.title && lhs.subtitle == rhs.subtitle
+    }
+}

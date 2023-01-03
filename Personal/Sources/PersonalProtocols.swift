@@ -33,7 +33,6 @@ protocol PersonalViewOutput: AnyObject {
 }
 
 protocol PersonalInteractorInput: AnyObject {
-    
     func obtainUserAvatar()
     func obtainUserName()
     func saveUserAvatar(_ data: Data)
