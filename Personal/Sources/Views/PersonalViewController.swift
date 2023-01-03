@@ -171,6 +171,10 @@ final class PersonalViewController: UIViewController {
         onChangingTabEventHandler()
     }
     
+    @objc private func addNewRecipe() {
+        presenter.openRecipeFormModule()
+    }
+    
     private func onChangingTabEventHandler() {
         emptyDataLabel.text = nil
         emptyDataImageView.image = nil
@@ -199,6 +203,7 @@ final class PersonalViewController: UIViewController {
     }
     
     private func setupView() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewRecipe))
         title = Texts.Personal.title
         view.backgroundColor = Colors.systemBackground
         
@@ -294,6 +299,10 @@ extension PersonalViewController: UICollectionViewDataSource, UICollectionViewDe
         }
         cell.configure(with: data[indexPath.row])
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        presenter.didSelectRecipe(data[indexPath.row])
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

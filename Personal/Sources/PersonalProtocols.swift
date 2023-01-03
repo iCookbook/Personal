@@ -5,7 +5,8 @@
 //  Created by Егор Бадмаев on 29.12.2022.
 //
 
-import Foundation
+import Models
+import Persistence
 
 public protocol PersonalModuleInput {
     var moduleOutput: PersonalModuleOutput? { get }
@@ -24,13 +25,14 @@ protocol PersonalViewInput: AnyObject {
 protocol PersonalViewOutput: AnyObject {
     func viewDidLoad()
     func fetchRecipes(for tab: Tabs)
+    func openRecipeFormModule()
+    func didSelectRecipe(_ entity: RecipeEntity)
     
     func saveUserAvatar(_ data: Data)
     func saveUserName(_ name: String)
 }
 
 protocol PersonalInteractorInput: AnyObject {
-    
     func obtainUserAvatar()
     func obtainUserName()
     func saveUserAvatar(_ data: Data)
@@ -48,6 +50,8 @@ protocol PersonalInteractorOutput: AnyObject {
 }
 
 protocol PersonalRouterInput: AnyObject {
+    func openRecipeDetailsModule(for recipe: Models.Recipe)
+    func openRecipeFormModule(for recipe: Persistence.Recipe?)
 }
 
 protocol PersonalRouterOutput: AnyObject {
