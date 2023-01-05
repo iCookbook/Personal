@@ -19,12 +19,12 @@ protocol PersonalViewInput: AnyObject {
     func showUserAvatar(_ data: Data)
     func showUserName(_ name: String)
     
-    func updateRecipes(_ entities: [RecipeEntity])
+    func updateRecipes(for selectedTab: Tabs, _ entities: [RecipeEntity])
 }
 
 protocol PersonalViewOutput: AnyObject {
     func viewDidLoad()
-    func fetchRecipes(for tab: Tabs)
+    func fetchRecipes(_ tab: Tabs?)
     func openRecipeFormModule()
     func didSelectRecipe(_ entity: RecipeEntity)
     

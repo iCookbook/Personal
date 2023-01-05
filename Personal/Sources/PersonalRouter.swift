@@ -27,7 +27,7 @@ extension PersonalRouter: PersonalRouterInput {
         viewController?.navigationController?.pushViewController(assembly.viewController, animated: true)
     }
     
-    /// Opens _RecipeForm module.
+    /// Opens _RecipeForm_ module.
     ///
     /// - Parameter recipe: **optional** recipe to open RecipeForm with.
     func openRecipeFormModule(for recipe: Persistence.Recipe?) {

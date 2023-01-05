@@ -17,6 +17,8 @@ final class PersonalPresenter {
     
     private let router: PersonalRouterInput
     private let interactor: PersonalInteractorInput
+    /// Defines selected tab.
+    private var selectedTab = Tabs.personal
     
     // MARK: - Init
     
@@ -40,12 +42,17 @@ extension PersonalPresenter: PersonalViewOutput {
     /// Fetches recipes according to the selected tab.
     ///
     /// - Parameter tab: selected tab from view.
-    func fetchRecipes(for tab: Tabs) {
-        switch tab {
-        case .favourites:
-            interactor.provideFavouritesRecipes()
-        case .personal:
-            interactor.providePersonalRecipes()
+    func fetchRecipes(_ tab: Tabs?) {
+        /// Save selected tab, if provided tab is not `nil`.
+        selectedTab = tab ?? selectedTab
+        /// Ask interactor to provide proper data for tab.
+        DispatchQueue.global(qos: .userInitiated).async {
+            switch tab ?? self.selectedTab {
+            case .favourites:
+                self.interactor.provideFavouritesRecipes()
+            case .personal:
+                self.interactor.providePersonalRecipes()
+            }
         }
     }
     
@@ -64,7 +71,7 @@ extension PersonalPresenter: PersonalViewOutput {
         case let recipe as Persistence.Recipe:
             router.openRecipeFormModule(for: recipe)
         default:
-            Logger.log("Unhandled case.", logType: .warning)
+            Logger.log("\(type(of: entity.source)) is unsupported for this method", logType: .error)
             break
         }
     }
@@ -104,7 +111,9 @@ extension PersonalPresenter: PersonalInteractorOutput {
     ///
     /// - Parameter entities: recipe entities to be displayed in view.
     func provideRecipes(_ entities: [RecipeEntity]) {
-        view?.updateRecipes(entities)
+        DispatchQueue.main.async {
+            self.view?.updateRecipes(for: self.selectedTab, entities)
+        }
     }
 }
 
