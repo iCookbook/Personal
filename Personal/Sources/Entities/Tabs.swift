@@ -6,8 +6,9 @@
 //
 
 import Resources
+import UIKit
 
-enum Tabs {
+enum Tabs: Int {
     case personal
     case favourites
 }
@@ -22,12 +23,12 @@ extension Tabs {
         }
     }
     
-    var emptyDataImage: Data? {
+    var emptyDataImage: UIImage? {
         switch self {
         case .personal:
-            return Images.Discover.bookFilled?.pngData()
+            return Images.Discover.bookFilled
         case .favourites:
-            return Images.Personal.favouritesSelected?.pngData()
+            return Images.Personal.favourites
         }
     }
 }

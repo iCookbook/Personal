@@ -39,7 +39,7 @@ final class SmallRecipeCollectionViewCell: UICollectionViewCell {
     
     public let recipeSubtitleLabel: UILabel = {
         let label = UILabel()
-        label.font = Fonts.smallBody()
+        label.font = Fonts.subtitle()
         label.textColor = .white
         label.layer.zPosition = 1
         label.translatesAutoresizingMaskIntoConstraints = false
