@@ -23,7 +23,7 @@ This module has 4 dependencies:
 
 ## Screenshots
 
-| <img width=300 src=""> | <img width=300 src=""> |
+| <img width=300 src="https://user-images.githubusercontent.com/60363270/210759369-b3be228f-ec45-419d-9770-900a27dad693.png"> | <img width=300 src="https://user-images.githubusercontent.com/60363270/210759393-32d3f9f2-26bf-4ff1-ae5e-8f042857deaa.png"> |
 |---|---|
 
 ---
