@@ -16,9 +16,6 @@ final class PersonalViewController: UIViewController {
     
     private let presenter: PersonalViewOutput
     
-    /// Defines selected tab in `tabsStackView`.
-    private var selectedTab = Tabs.personal
-    
     /// Data to display.
     private var data = [RecipeEntity]()
     
@@ -62,29 +59,11 @@ final class PersonalViewController: UIViewController {
         return textField
     }()
     
-    private lazy var yourRecipesTab: ProfileTabView = {
-        let tab = ProfileTabView(image: Images.Personal.personal,
-                                 selectedImage: Images.Personal.personalSelected,
-                                 text: Texts.Personal.yourRecipes)
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTappingOnRecipesTab))
-        tab.addGestureRecognizer(tapGestureRecognizer)
-        return tab
-    }()
-    private lazy var favouritesTab: ProfileTabView = {
-        let tab = ProfileTabView(image: Images.Personal.favourites,
-                                 selectedImage: Images.Personal.favouritesSelected,
-                                 text: Texts.Personal.favourites)
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTappingOnFavouritesTab))
-        tab.addGestureRecognizer(tapGestureRecognizer)
-        return tab
-    }()
-    private lazy var tabsStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [yourRecipesTab, favouritesTab])
-        stackView.distribution = .fillEqually
-        stackView.alignment = .center
-        stackView.axis = .horizontal
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        return stackView
+    private lazy var segmentedControl: UISegmentedControl = {
+        let segmentedControl = UISegmentedControl(items: [Texts.Personal.yourRecipes, Texts.Personal.favourites])
+        segmentedControl.addTarget(self, action: #selector(segmentedControlChanged), for: .valueChanged)
+        segmentedControl.translatesAutoresizingMaskIntoConstraints = false
+        return segmentedControl
     }()
     
     private lazy var recipesCollectionView: UICollectionView = {
@@ -152,7 +131,7 @@ final class PersonalViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        presenter.fetchRecipes(for: selectedTab)
+        presenter.fetchRecipes(nil)
     }
     
     // MARK: - Private Methods
@@ -161,54 +140,36 @@ final class PersonalViewController: UIViewController {
         present(avatarImagePicker, animated: true)
     }
     
-    @objc private func handleTappingOnRecipesTab() {
-        selectedTab = .personal
-        onChangingTabEventHandler()
-    }
-    
-    @objc private func handleTappingOnFavouritesTab() {
-        selectedTab = .favourites
-        onChangingTabEventHandler()
-    }
-    
     @objc private func addNewRecipe() {
         presenter.openRecipeFormModule()
     }
     
-    private func onChangingTabEventHandler() {
-        emptyDataLabel.text = nil
-        emptyDataImageView.image = nil
-        presenter.fetchRecipes(for: selectedTab)
-        yourRecipesTab.isSelected = selectedTab == .personal
-        favouritesTab.isSelected = selectedTab == .favourites
+    @objc private func segmentedControlChanged(sender: UISegmentedControl) {
+        emptyDataStackView.removeFromSuperview()
+        presenter.fetchRecipes(Tabs(rawValue: sender.selectedSegmentIndex))
     }
     
-    private func turnOnEmptyMode() {
-        emptyDataLabel.text = selectedTab.emptyDataDescription
-        emptyDataImageView.image = UIImage(data: selectedTab.emptyDataImage ?? Data())
+    private func turnOnEmptyMode(for tab: Tabs) {
+        emptyDataLabel.text = tab.emptyDataDescription
+        emptyDataImageView.image = tab.emptyDataImage
         
-        if !scrollView.subviews.contains(emptyDataStackView) {
-            scrollView.addSubview(emptyDataStackView)
+        scrollView.addSubview(emptyDataStackView)
+        
+        NSLayoutConstraint.activate([
+            emptyDataImageView.heightAnchor.constraint(equalToConstant: 120),
+            emptyDataImageView.widthAnchor.constraint(equalToConstant: 120),
             
-            NSLayoutConstraint.activate([
-                emptyDataImageView.heightAnchor.constraint(equalToConstant: 140),
-                emptyDataImageView.widthAnchor.constraint(equalToConstant: 140),
-                
-                emptyDataStackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 16),
-                emptyDataStackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -16),
-                emptyDataStackView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-                emptyDataStackView.centerYAnchor.constraint(equalTo: scrollView.centerYAnchor),
-            ])
-        }
+            emptyDataStackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 16),
+            emptyDataStackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -16),
+            emptyDataStackView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+            emptyDataStackView.centerYAnchor.constraint(equalTo: scrollView.centerYAnchor, constant: 24),
+        ])
     }
     
     private func setupView() {
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewRecipe))
         title = Texts.Personal.title
         view.backgroundColor = Colors.systemBackground
-        
-        yourRecipesTab.isSelected = selectedTab == Tabs.personal
-        favouritesTab.isSelected = selectedTab == Tabs.favourites
         
         view.addSubview(scrollView)
         scrollView.addSubview(topView)
@@ -218,7 +179,8 @@ final class PersonalViewController: UIViewController {
         
         scrollView.addSubview(contentView)
         contentView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(tabsStackView)
+        contentView.addSubview(segmentedControl)
+//        contentView.addSubview(tabsStackView)
         contentView.addSubview(recipesCollectionView)
         
         NSLayoutConstraint.activate([
@@ -248,11 +210,11 @@ final class PersonalViewController: UIViewController {
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo: view.widthAnchor),
             
-            tabsStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            tabsStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 32),
-            tabsStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            segmentedControl.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            segmentedControl.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            segmentedControl.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             
-            recipesCollectionView.topAnchor.constraint(equalTo: tabsStackView.bottomAnchor, constant: 16),
+            recipesCollectionView.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: 16),
             recipesCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             recipesCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             recipesCollectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
@@ -272,15 +234,18 @@ extension PersonalViewController: PersonalViewInput {
         usernameTextField.text = name
     }
     
-    func updateRecipes(_ entities: [RecipeEntity]) {
+    func updateRecipes(for selectedTab: Tabs, _ entities: [RecipeEntity]) {
         data = entities
+        segmentedControl.selectedSegmentIndex = selectedTab.rawValue
         
         UIView.transition(with: recipesCollectionView, duration: 0.55, options: [.allowUserInteraction, .transitionCrossDissolve], animations: {
             self.recipesCollectionView.reloadData()
         })
         
         if data.isEmpty {
-            turnOnEmptyMode()
+            turnOnEmptyMode(for: selectedTab)
+        } else {
+            emptyDataStackView.removeFromSuperview()
         }
     }
 }
