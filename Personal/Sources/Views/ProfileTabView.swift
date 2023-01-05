@@ -12,6 +12,7 @@ final class ProfileTabView: UIStackView {
     
     // MARK: - Public Properties
     
+    /// Defines whether tab was selected and handles it's changing value in `didSet`.
     public var isSelected = false {
         didSet {
             if isSelected {
@@ -28,8 +29,10 @@ final class ProfileTabView: UIStackView {
     
     // MARK: - Private Properties
     
-    private var selectedImage: UIImage?
+    /// Usual image.
     private var image: UIImage?
+    /// Highlighted/selected imaged, when tab is **selected**.
+    private var selectedImage: UIImage?
     
     private let iconImageView: UIImageView = {
         let imageView = UIImageView()

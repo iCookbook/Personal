@@ -191,13 +191,13 @@ final class PersonalViewController: UIViewController {
             scrollView.addSubview(emptyDataStackView)
             
             NSLayoutConstraint.activate([
-                emptyDataImageView.heightAnchor.constraint(equalToConstant: 140),
-                emptyDataImageView.widthAnchor.constraint(equalToConstant: 140),
+                emptyDataImageView.heightAnchor.constraint(equalToConstant: 120),
+                emptyDataImageView.widthAnchor.constraint(equalToConstant: 120),
                 
                 emptyDataStackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 16),
                 emptyDataStackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -16),
                 emptyDataStackView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-                emptyDataStackView.centerYAnchor.constraint(equalTo: scrollView.centerYAnchor),
+                emptyDataStackView.centerYAnchor.constraint(equalTo: scrollView.centerYAnchor, constant: 24),
             ])
         }
     }
@@ -281,6 +281,9 @@ extension PersonalViewController: PersonalViewInput {
         
         if data.isEmpty {
             turnOnEmptyMode()
+        } else {
+            emptyDataLabel.text = nil
+            emptyDataImageView.image = nil
         }
     }
 }
