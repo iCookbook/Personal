@@ -5,6 +5,7 @@
 //  Created by Егор Бадмаев on 03.01.2023.
 //
 
+import XCTest
 @testable import Personal
 
 class SpyPersonalInteractor: PersonalInteractorInput {
@@ -15,6 +16,8 @@ class SpyPersonalInteractor: PersonalInteractorInput {
     var userNameToBeSaved: String!
     var favouritesRecipesDidProvided = false
     var personalRecipesDidProvided = false
+    
+    var expectation: XCTestExpectation!
     
     func obtainUserAvatar() {
         userAvatarDidObtained = true
@@ -34,9 +37,17 @@ class SpyPersonalInteractor: PersonalInteractorInput {
     
     func provideFavouritesRecipes() {
         favouritesRecipesDidProvided = true
+        
+        if let expectation = expectation {
+            expectation.fulfill()
+        }
     }
     
     func providePersonalRecipes() {
         personalRecipesDidProvided = true
+        
+        if let expectation = expectation {
+            expectation.fulfill()
+        }
     }
 }

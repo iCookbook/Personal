@@ -41,9 +41,12 @@ class PersonalPresenterTests: XCTestCase {
     func testFetchingRecipesForPersonalTab() throws {
         spyInteractor = SpyPersonalInteractor()
         presenter = PersonalPresenter(router: mockRouter, interactor: spyInteractor)
+        let expectation = expectation(description: "testProvidingRecipes")
+        spyInteractor.expectation = expectation
         
-        presenter.fetchRecipes(for: .personal)
+        presenter.fetchRecipes(.personal)
         
+        wait(for: [expectation], timeout: 1.0)
         XCTAssertTrue(spyInteractor.personalRecipesDidProvided)
         XCTAssertFalse(spyInteractor.favouritesRecipesDidProvided)
     }
@@ -51,9 +54,12 @@ class PersonalPresenterTests: XCTestCase {
     func testFetchingRecipesForFavouritesTab() throws {
         spyInteractor = SpyPersonalInteractor()
         presenter = PersonalPresenter(router: mockRouter, interactor: spyInteractor)
+        let expectation = expectation(description: "testProvidingRecipes")
+        spyInteractor.expectation = expectation
         
-        presenter.fetchRecipes(for: .favourites)
+        presenter.fetchRecipes(.favourites)
         
+        wait(for: [expectation], timeout: 1.0)
         XCTAssertFalse(spyInteractor.personalRecipesDidProvided)
         XCTAssertTrue(spyInteractor.favouritesRecipesDidProvided)
     }
@@ -147,6 +153,8 @@ class PersonalPresenterTests: XCTestCase {
     
     func testProvidingRecipes() throws {
         let spyView = SpyPersonalView()
+        let expectation = expectation(description: "testProvidingRecipes")
+        spyView.expectation = expectation
         presenter = PersonalPresenter(router: mockRouter, interactor: mockInteractor)
         presenter.view = spyView
         let entitiesToProvide = [RecipeEntity(title: "1", subtitle: "1", imageData: Data(), source: "1"),
@@ -155,6 +163,7 @@ class PersonalPresenterTests: XCTestCase {
         
         presenter.provideRecipes(entitiesToProvide)
         
+        wait(for: [expectation], timeout: 1.0)
         XCTAssertNotNil(spyView.entitiesToBeUpdated)
         XCTAssertEqual(spyView.entitiesToBeUpdated, entitiesToProvide)
     }
