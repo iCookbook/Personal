@@ -34,8 +34,8 @@ class PersonalPresenterTests: XCTestCase {
         
         presenter.viewDidLoad()
         
-        XCTAssertTrue(spyInteractor.userAvatarDidObtained)
-        XCTAssertTrue(spyInteractor.userNameDidObtained)
+        XCTAssertTrue(spyInteractor.userAvatarDidObtain)
+        XCTAssertTrue(spyInteractor.userNameDidObtain)
     }
     
     func testFetchingRecipesForPersonalTab() throws {
@@ -47,8 +47,8 @@ class PersonalPresenterTests: XCTestCase {
         presenter.fetchRecipes(.personal)
         
         wait(for: [expectation], timeout: 1.0)
-        XCTAssertTrue(spyInteractor.personalRecipesDidProvided)
-        XCTAssertFalse(spyInteractor.favouritesRecipesDidProvided)
+        XCTAssertTrue(spyInteractor.personalRecipesDidProvide)
+        XCTAssertFalse(spyInteractor.favouritesRecipesDidProvide)
     }
     
     func testFetchingRecipesForFavouritesTab() throws {
@@ -60,8 +60,8 @@ class PersonalPresenterTests: XCTestCase {
         presenter.fetchRecipes(.favourites)
         
         wait(for: [expectation], timeout: 1.0)
-        XCTAssertFalse(spyInteractor.personalRecipesDidProvided)
-        XCTAssertTrue(spyInteractor.favouritesRecipesDidProvided)
+        XCTAssertFalse(spyInteractor.personalRecipesDidProvide)
+        XCTAssertTrue(spyInteractor.favouritesRecipesDidProvide)
     }
     
     /// When user tries to add his own recipe.
@@ -112,8 +112,8 @@ class PersonalPresenterTests: XCTestCase {
         
         presenter.saveUserAvatar(dataToProvide)
         
-        XCTAssertNotNil(spyInteractor.userAvatarDataToBeSaved)
-        XCTAssertEqual(spyInteractor.userAvatarDataToBeSaved, dataToProvide)
+        XCTAssertNotNil(spyInteractor.userAvatarDataToBeSave)
+        XCTAssertEqual(spyInteractor.userAvatarDataToBeSave, dataToProvide)
     }
     
     func testProvidingNameToInteractor() throws {

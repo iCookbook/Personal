@@ -13,12 +13,14 @@ class SpyPersonalRouter: PersonalRouterInput {
     
     var apiModel: Models.Recipe!
     var persistenceModel: Persistence.Recipe?
+    var moduleDependency: CoreDataManagerProtocol!
     
     func openRecipeDetailsModule(for recipe: Models.Recipe) {
         apiModel = recipe
     }
     
-    func openRecipeFormModule(for recipe: Persistence.Recipe?) {
+    func openRecipeFormModule(for recipe: Persistence.Recipe?, moduleDependency: CoreDataManagerProtocol) {
         persistenceModel = recipe
+        self.moduleDependency = moduleDependency
     }
 }

@@ -6,6 +6,7 @@
 //
 
 @testable import Personal
+@testable import Persistence
 
 class MockPersonalInteractor: PersonalInteractorInput {
     
@@ -25,5 +26,8 @@ class MockPersonalInteractor: PersonalInteractorInput {
     }
     
     func providePersonalRecipes() {
+    }
+    
+    func provideCoreDataManager(with recipe: Recipe?) {
     }
 }
