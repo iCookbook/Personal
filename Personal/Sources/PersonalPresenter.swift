@@ -58,7 +58,7 @@ extension PersonalPresenter: PersonalViewOutput {
     
     /// Opens _RecipeForm_ module without provided recipe (new recipe).
     func openRecipeFormModule() {
-        router.openRecipeFormModule(for: nil)
+        interactor.provideCoreDataManager(with: nil)
     }
     
     /// Handles tapping on recipe.
@@ -69,7 +69,7 @@ extension PersonalPresenter: PersonalViewOutput {
         case let recipe as Models.Recipe:
             router.openRecipeDetailsModule(for: recipe)
         case let recipe as Persistence.Recipe:
-            router.openRecipeFormModule(for: recipe)
+            interactor.provideCoreDataManager(with: recipe)
         default:
             Logger.log("\(type(of: entity.source)) is unsupported for this method", logType: .error)
             break
@@ -114,6 +114,10 @@ extension PersonalPresenter: PersonalInteractorOutput {
         DispatchQueue.main.async {
             self.view?.updateRecipes(for: self.selectedTab, entities)
         }
+    }
+    
+    func didProvideCoreDataManager(_ coreDataManager: CoreDataManagerProtocol, recipe: Persistence.Recipe?) {
+        router.openRecipeFormModule(for: recipe, moduleDependency: coreDataManager)
     }
 }
 

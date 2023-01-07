@@ -14,6 +14,6 @@ class MockPersonalRouter: PersonalRouterInput {
     func openRecipeDetailsModule(for recipe: Models.Recipe) {
     }
     
-    func openRecipeFormModule(for recipe: Persistence.Recipe?) {
+    func openRecipeFormModule(for recipe: Persistence.Recipe?, moduleDependency: CoreDataManagerProtocol) {
     }
 }

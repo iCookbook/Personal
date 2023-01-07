@@ -5,27 +5,33 @@
 //  Created by Егор Бадмаев on 03.01.2023.
 //
 
+import XCTest
 @testable import Personal
+@testable import Persistence
 
 class SpyPersonalInteractor: PersonalInteractorInput {
     
-    var userAvatarDidObtained = false
-    var userNameDidObtained = false
-    var userAvatarDataToBeSaved: Data!
+    var userAvatarDidObtain = false
+    var userNameDidObtain = false
+    var userAvatarDataToBeSave: Data!
     var userNameToBeSaved: String!
-    var favouritesRecipesDidProvided = false
-    var personalRecipesDidProvided = false
+    var favouritesRecipesDidProvide = false
+    var personalRecipesDidProvide = false
+    var coreDataManagerFlagDidProvide = false
+    var providedRecipe: Recipe?
+    
+    var expectation: XCTestExpectation!
     
     func obtainUserAvatar() {
-        userAvatarDidObtained = true
+        userAvatarDidObtain = true
     }
     
     func obtainUserName() {
-        userNameDidObtained = true
+        userNameDidObtain = true
     }
     
     func saveUserAvatar(_ data: Data) {
-        userAvatarDataToBeSaved = data
+        userAvatarDataToBeSave = data
     }
     
     func saveUserName(_ name: String) {
@@ -33,10 +39,23 @@ class SpyPersonalInteractor: PersonalInteractorInput {
     }
     
     func provideFavouritesRecipes() {
-        favouritesRecipesDidProvided = true
+        favouritesRecipesDidProvide = true
+        
+        if let expectation = expectation {
+            expectation.fulfill()
+        }
     }
     
     func providePersonalRecipes() {
-        personalRecipesDidProvided = true
+        personalRecipesDidProvide = true
+        
+        if let expectation = expectation {
+            expectation.fulfill()
+        }
+    }
+    
+    func provideCoreDataManager(with recipe: Recipe?) {
+        coreDataManagerFlagDidProvide = true
+        providedRecipe = recipe
     }
 }

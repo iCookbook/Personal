@@ -30,12 +30,13 @@ extension PersonalRouter: PersonalRouterInput {
     /// Opens _RecipeForm_ module.
     ///
     /// - Parameter recipe: **optional** recipe to open RecipeForm with.
-    func openRecipeFormModule(for recipe: Persistence.Recipe?) {
-        let context = RecipeFormContext(moduleOutput: self, recipe: recipe)
+    func openRecipeFormModule(for recipe: Persistence.Recipe?, moduleDependency: CoreDataManagerProtocol) {
+        let context = RecipeFormContext(moduleOutput: self, recipe: recipe, moduleDependency: moduleDependency)
         let assembly = RecipeFormAssembly.assemble(with: context)
         let destination = assembly.viewController
         destination.modalPresentationStyle = .fullScreen
-        viewController?.present(destination, animated: true)
+        let navController = UINavigationController(rootViewController: destination)
+        viewController?.present(navController, animated: true)
     }
 }
 

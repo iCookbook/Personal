@@ -65,4 +65,8 @@ extension PersonalInteractor: PersonalInteractorInput {
         }
         presenter?.provideRecipes(entities)
     }
+    
+    func provideCoreDataManager(with recipe: Recipe?) {
+        presenter?.didProvideCoreDataManager(coreDataManager, recipe: recipe)
+    }
 }

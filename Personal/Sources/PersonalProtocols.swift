@@ -40,6 +40,7 @@ protocol PersonalInteractorInput: AnyObject {
     
     func provideFavouritesRecipes()
     func providePersonalRecipes()
+    func provideCoreDataManager(with recipe: Persistence.Recipe?)
 }
 
 protocol PersonalInteractorOutput: AnyObject {
@@ -47,11 +48,12 @@ protocol PersonalInteractorOutput: AnyObject {
     func provideUserName(_ name: String)
     
     func provideRecipes(_ entities: [RecipeEntity])
+    func didProvideCoreDataManager(_ coreDataManager: CoreDataManagerProtocol, recipe: Persistence.Recipe?)
 }
 
 protocol PersonalRouterInput: AnyObject {
     func openRecipeDetailsModule(for recipe: Models.Recipe)
-    func openRecipeFormModule(for recipe: Persistence.Recipe?)
+    func openRecipeFormModule(for recipe: Persistence.Recipe?, moduleDependency: CoreDataManagerProtocol)
 }
 
 protocol PersonalRouterOutput: AnyObject {

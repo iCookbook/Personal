@@ -6,6 +6,7 @@
 //
 
 @testable import Personal
+@testable import Persistence
 
 class SpyPersonalPresenter: PersonalInteractorOutput {
     
@@ -27,5 +28,9 @@ class SpyPersonalPresenter: PersonalInteractorOutput {
     
     func provideRecipes(_ entities: [RecipeEntity]) {
         self.entities = entities
+    }
+    
+    func didProvideCoreDataManager(_ coreDataManager: CoreDataManagerProtocol, recipe: Recipe?) {
+        
     }
 }

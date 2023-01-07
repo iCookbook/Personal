@@ -34,28 +34,34 @@ class PersonalPresenterTests: XCTestCase {
         
         presenter.viewDidLoad()
         
-        XCTAssertTrue(spyInteractor.userAvatarDidObtained)
-        XCTAssertTrue(spyInteractor.userNameDidObtained)
+        XCTAssertTrue(spyInteractor.userAvatarDidObtain)
+        XCTAssertTrue(spyInteractor.userNameDidObtain)
     }
     
     func testFetchingRecipesForPersonalTab() throws {
         spyInteractor = SpyPersonalInteractor()
         presenter = PersonalPresenter(router: mockRouter, interactor: spyInteractor)
+        let expectation = expectation(description: "testProvidingRecipes")
+        spyInteractor.expectation = expectation
         
-        presenter.fetchRecipes(for: .personal)
+        presenter.fetchRecipes(.personal)
         
-        XCTAssertTrue(spyInteractor.personalRecipesDidProvided)
-        XCTAssertFalse(spyInteractor.favouritesRecipesDidProvided)
+        wait(for: [expectation], timeout: 1.0)
+        XCTAssertTrue(spyInteractor.personalRecipesDidProvide)
+        XCTAssertFalse(spyInteractor.favouritesRecipesDidProvide)
     }
     
     func testFetchingRecipesForFavouritesTab() throws {
         spyInteractor = SpyPersonalInteractor()
         presenter = PersonalPresenter(router: mockRouter, interactor: spyInteractor)
+        let expectation = expectation(description: "testProvidingRecipes")
+        spyInteractor.expectation = expectation
         
-        presenter.fetchRecipes(for: .favourites)
+        presenter.fetchRecipes(.favourites)
         
-        XCTAssertFalse(spyInteractor.personalRecipesDidProvided)
-        XCTAssertTrue(spyInteractor.favouritesRecipesDidProvided)
+        wait(for: [expectation], timeout: 1.0)
+        XCTAssertFalse(spyInteractor.personalRecipesDidProvide)
+        XCTAssertTrue(spyInteractor.favouritesRecipesDidProvide)
     }
     
     /// When user tries to add his own recipe.
@@ -69,15 +75,15 @@ class PersonalPresenterTests: XCTestCase {
     }
     
     func testSelectingRecipePersistence() throws {
-        spyRouter = SpyPersonalRouter()
-        presenter = PersonalPresenter(router: spyRouter, interactor: mockInteractor)
+        spyInteractor = SpyPersonalInteractor()
+        presenter = PersonalPresenter(router: mockRouter, interactor: spyInteractor)
         let recipe = Persistence.Recipe()
         let entity = RecipeEntity(title: "", subtitle: "", imageData: Data(), source: recipe)
         
         presenter.didSelectRecipe(entity)
         
-        XCTAssertIdentical(spyRouter.persistenceModel, recipe)
-        XCTAssertNil(spyRouter.apiModel)
+        XCTAssertIdentical(spyInteractor.providedRecipe, recipe)
+        XCTAssertTrue(spyInteractor.coreDataManagerFlagDidProvide)
     }
     
     func testSelectingRecipeModels() throws {
@@ -106,8 +112,8 @@ class PersonalPresenterTests: XCTestCase {
         
         presenter.saveUserAvatar(dataToProvide)
         
-        XCTAssertNotNil(spyInteractor.userAvatarDataToBeSaved)
-        XCTAssertEqual(spyInteractor.userAvatarDataToBeSaved, dataToProvide)
+        XCTAssertNotNil(spyInteractor.userAvatarDataToBeSave)
+        XCTAssertEqual(spyInteractor.userAvatarDataToBeSave, dataToProvide)
     }
     
     func testProvidingNameToInteractor() throws {
@@ -147,6 +153,8 @@ class PersonalPresenterTests: XCTestCase {
     
     func testProvidingRecipes() throws {
         let spyView = SpyPersonalView()
+        let expectation = expectation(description: "testProvidingRecipes")
+        spyView.expectation = expectation
         presenter = PersonalPresenter(router: mockRouter, interactor: mockInteractor)
         presenter.view = spyView
         let entitiesToProvide = [RecipeEntity(title: "1", subtitle: "1", imageData: Data(), source: "1"),
@@ -155,6 +163,7 @@ class PersonalPresenterTests: XCTestCase {
         
         presenter.provideRecipes(entitiesToProvide)
         
+        wait(for: [expectation], timeout: 1.0)
         XCTAssertNotNil(spyView.entitiesToBeUpdated)
         XCTAssertEqual(spyView.entitiesToBeUpdated, entitiesToProvide)
     }
