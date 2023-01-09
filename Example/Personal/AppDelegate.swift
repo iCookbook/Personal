@@ -11,6 +11,11 @@ import Personal
 import Resources
 import Persistence
 
+struct PersonalContext: PersonalDependenciesProtocol {
+    weak var moduleOutput: PersonalModuleOutput?
+    let coreDataManager: CoreDataManagerProtocol
+}
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
@@ -21,7 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         let window = UIWindow(frame: UIScreen.main.bounds)
-        let context = PersonalContext(moduleOutput: nil, moduleDependency: coreDataManager)
+        let context = PersonalContext(moduleOutput: nil, coreDataManager: coreDataManager)
         let assembly = PersonalAssembly.assemble(with: context)
         
         let navController = UINavigationController(rootViewController: assembly.viewController)
