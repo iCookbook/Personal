@@ -18,7 +18,6 @@ class SpyPersonalInteractor: PersonalInteractorInput {
     var favouritesRecipesDidProvide = false
     var personalRecipesDidProvide = false
     var coreDataManagerFlagDidProvide = false
-    var providedRecipe: Recipe?
     
     var expectation: XCTestExpectation!
     
@@ -54,8 +53,7 @@ class SpyPersonalInteractor: PersonalInteractorInput {
         }
     }
     
-    func provideCoreDataManager(with recipe: Recipe?) {
+    func provideCoreDataManager() {
         coreDataManagerFlagDidProvide = true
-        providedRecipe = recipe
     }
 }

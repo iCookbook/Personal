@@ -45,6 +45,7 @@ extension PersonalRouter: RecipeFormModuleOutput {
     /// Handles finishing _RecipeForm_ module.
     func recipeFormModuleDidFinish() {
         viewController?.presentedViewController?.dismiss(animated: true)
+        presenter?.refreshDataOnDisplay()
     }
 }
 

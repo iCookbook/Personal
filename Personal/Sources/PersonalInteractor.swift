@@ -66,7 +66,10 @@ extension PersonalInteractor: PersonalInteractorInput {
         presenter?.provideRecipes(entities)
     }
     
-    func provideCoreDataManager(with recipe: Recipe?) {
-        presenter?.didProvideCoreDataManager(coreDataManager, recipe: recipe)
+    /// Provide module dependency to presenter.
+    ///
+    /// - Parameter recipe: Saving recipe instance.
+    func provideCoreDataManager() {
+        presenter?.didProvideCoreDataManager(coreDataManager)
     }
 }

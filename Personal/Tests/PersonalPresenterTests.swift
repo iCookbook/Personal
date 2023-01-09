@@ -77,12 +77,10 @@ class PersonalPresenterTests: XCTestCase {
     func testSelectingRecipePersistence() throws {
         spyInteractor = SpyPersonalInteractor()
         presenter = PersonalPresenter(router: mockRouter, interactor: spyInteractor)
-        let recipe = Persistence.Recipe()
-        let entity = RecipeEntity(title: "", subtitle: "", imageData: Data(), source: recipe)
+        let entity = RecipeEntity(title: "", subtitle: "", imageData: Data(), source: Persistence.Recipe())
         
         presenter.didSelectRecipe(entity)
         
-        XCTAssertIdentical(spyInteractor.providedRecipe, recipe)
         XCTAssertTrue(spyInteractor.coreDataManagerFlagDidProvide)
     }
     

@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'Personal'
-  s.version          = '2.0.0'
+  s.version          = '2.0.1'
   s.summary          = '\'Personal\' module.'
   s.homepage         = 'https://github.com/iCookbook/Personal'
   s.screenshots     = 'https://user-images.githubusercontent.com/60363270/210759369-b3be228f-ec45-419d-9770-900a27dad693.png',

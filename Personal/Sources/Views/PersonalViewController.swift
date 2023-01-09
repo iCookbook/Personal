@@ -180,7 +180,6 @@ final class PersonalViewController: UIViewController {
         scrollView.addSubview(contentView)
         contentView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(segmentedControl)
-//        contentView.addSubview(tabsStackView)
         contentView.addSubview(recipesCollectionView)
         
         NSLayoutConstraint.activate([
