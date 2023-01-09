@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Persistence
 
 public final class PersonalAssembly {
     
@@ -21,9 +20,9 @@ public final class PersonalAssembly {
     
     // MARK: - Public Methods
     
-    public static func assemble(with context: PersonalContext) -> PersonalAssembly {
+    public static func assemble(with context: PersonalDependenciesProtocol) -> PersonalAssembly {
         let router = PersonalRouter()
-        let interactor = PersonalInteractor(coreDataManager: context.moduleDependency)
+        let interactor = PersonalInteractor(coreDataManager: context.coreDataManager)
         let presenter = PersonalPresenter(router: router, interactor: interactor)
         let viewController = PersonalViewController(presenter: presenter)
         
@@ -43,15 +42,5 @@ public final class PersonalAssembly {
         self.viewController = view
         self.input = input
         self.router = router
-    }
-}
-
-public struct PersonalContext {
-    weak var moduleOutput: PersonalModuleOutput?
-    let moduleDependency: CoreDataManagerProtocol
-    
-    public init(moduleOutput: PersonalModuleOutput? = nil, moduleDependency: CoreDataManagerProtocol) {
-        self.moduleOutput = moduleOutput
-        self.moduleDependency = moduleDependency
     }
 }

@@ -8,6 +8,11 @@
 import Models
 import Persistence
 
+public protocol PersonalDependenciesProtocol {
+    var moduleOutput: PersonalModuleOutput? { get set }
+    var coreDataManager: CoreDataManagerProtocol { get }
+}
+
 public protocol PersonalModuleInput {
     var moduleOutput: PersonalModuleOutput? { get }
 }
