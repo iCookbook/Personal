@@ -19,6 +19,8 @@ final class PersonalPresenter {
     private let interactor: PersonalInteractorInput
     /// Defines selected tab.
     private var selectedTab = Tabs.personal
+    /// Selected user's recipe.
+    private var selectedRecipe: Persistence.Recipe?
     
     // MARK: - Init
     
@@ -58,7 +60,8 @@ extension PersonalPresenter: PersonalViewOutput {
     
     /// Opens _RecipeForm_ module without provided recipe (new recipe).
     func openRecipeFormModule() {
-        interactor.provideCoreDataManager(with: nil)
+        selectedRecipe = nil
+        interactor.provideCoreDataManager()
     }
     
     /// Handles tapping on recipe.
@@ -69,7 +72,8 @@ extension PersonalPresenter: PersonalViewOutput {
         case let recipe as Models.Recipe:
             router.openRecipeDetailsModule(for: recipe)
         case let recipe as Persistence.Recipe:
-            interactor.provideCoreDataManager(with: recipe)
+            selectedRecipe = recipe
+            interactor.provideCoreDataManager()
         default:
             Logger.log("\(type(of: entity.source)) is unsupported for this method", logType: .error)
             break
@@ -116,10 +120,18 @@ extension PersonalPresenter: PersonalInteractorOutput {
         }
     }
     
-    func didProvideCoreDataManager(_ coreDataManager: CoreDataManagerProtocol, recipe: Persistence.Recipe?) {
-        router.openRecipeFormModule(for: recipe, moduleDependency: coreDataManager)
+    /// Provides module dependency from interactor to router.
+    ///
+    /// - Parameter coreDataManager: Module dependency.
+    func didProvideCoreDataManager(_ coreDataManager: CoreDataManagerProtocol) {
+        router.openRecipeFormModule(for: selectedRecipe, moduleDependency: coreDataManager)
     }
 }
 
 extension PersonalPresenter: PersonalRouterOutput {
+    
+    /// Asks presenter to refresh data: fetch and show.
+    func refreshDataOnDisplay() {
+        fetchRecipes(selectedTab)
+    }
 }

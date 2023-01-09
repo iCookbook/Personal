@@ -11,6 +11,9 @@ class MockPersonalPresenter {
 }
 
 extension MockPersonalPresenter: PersonalRouterOutput {
+    
+    func refreshDataOnDisplay() {
+    }
 }
 
 extension MockPersonalPresenter: PersonalModuleOutput {

@@ -7,6 +7,12 @@
 
 import XCTest
 @testable import Personal
+@testable import Persistence
+
+struct PersonalContext: PersonalDependenciesProtocol {
+    weak var moduleOutput: PersonalModuleOutput?
+    let coreDataManager: CoreDataManagerProtocol
+}
 
 class PersonalAssemblyTests: XCTestCase {
     
@@ -30,7 +36,7 @@ class PersonalAssemblyTests: XCTestCase {
     
     func testAssemblingWithModuleOutput() throws {
         let moduleOutput = MockPersonalPresenter()
-        context = PersonalContext(moduleOutput: moduleOutput, moduleDependency: mockCoreDataManager)
+        context = PersonalContext(moduleOutput: moduleOutput, coreDataManager: mockCoreDataManager)
         assembly = PersonalAssembly.assemble(with: context)
         
         XCTAssertNotNil(assembly.input)
@@ -49,7 +55,7 @@ class PersonalAssemblyTests: XCTestCase {
     }
     
     func testAssemblingWithoutModuleOutput() throws {
-        context = PersonalContext(moduleOutput: nil, moduleDependency: mockCoreDataManager)
+        context = PersonalContext(moduleOutput: nil, coreDataManager: mockCoreDataManager)
         assembly = PersonalAssembly.assemble(with: context)
         
         XCTAssertNotNil(assembly.input)

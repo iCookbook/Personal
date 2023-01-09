@@ -28,6 +28,6 @@ class MockPersonalInteractor: PersonalInteractorInput {
     func providePersonalRecipes() {
     }
     
-    func provideCoreDataManager(with recipe: Recipe?) {
+    func provideCoreDataManager() {
     }
 }

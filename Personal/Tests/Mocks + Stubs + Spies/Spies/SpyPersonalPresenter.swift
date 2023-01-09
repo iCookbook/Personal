@@ -15,6 +15,7 @@ class SpyPersonalPresenter: PersonalInteractorOutput {
     var userName: String!
     var provideUserNameWasCalled = false
     var entities: [RecipeEntity]!
+    var didProvideCoreDataManagerFlag = false
     
     func provideUserAvatar(_ data: Data) {
         userAvatarData = data
@@ -30,7 +31,7 @@ class SpyPersonalPresenter: PersonalInteractorOutput {
         self.entities = entities
     }
     
-    func didProvideCoreDataManager(_ coreDataManager: CoreDataManagerProtocol, recipe: Recipe?) {
-        
+    func didProvideCoreDataManager(_ coreDataManager: CoreDataManagerProtocol) {
+        didProvideCoreDataManagerFlag = true
     }
 }
